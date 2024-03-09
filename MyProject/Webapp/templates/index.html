@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing App</title>
+    <link rel="stylesheet" href="static/style.css">
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>MNIST NEURAL NETWORK </h1>
+            <p>Draw a number in the canvas below:</p>
+            <div id="canvasContainer">
+                <canvas id="canvas" width="280" height="280"></canvas>
+                <div class="button-container">
+                    <button onclick="clearCanvas()">Clear</button>
+                    <button onclick="predict()">Predict</button>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <!-- Add a canvas for the bar chart -->
+            <div class="chart-container">
+                <canvas id="barChart" width="800px" height="400px"></canvas>
+            </div>
+            <div id="prediction"></div>
+
+        </div>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>
