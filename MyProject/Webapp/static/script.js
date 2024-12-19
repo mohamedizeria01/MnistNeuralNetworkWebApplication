@@ -90,6 +90,57 @@ function predict() {
     sendPrediction(grayscaleArray);
 }
 
+function sendFeedback() {
+
+    const largeCanvas = document.getElementById('canvas');
+    const largeContext = largeCanvas.getContext('2d');
+    const largeImageData = largeContext.getImageData(0, 0, 280, 280);
+
+    const smallCanvas = document.createElement('canvas');
+    const smallContext = smallCanvas.getContext('2d');
+    smallCanvas.width = 28;
+    smallCanvas.height = 28;
+
+    // Get the correct label from the user input
+    const correctLabelInput = document.getElementById('correctLabel');
+    const correctLabel = correctLabelInput.value;
+
+
+    // Draw the large canvas onto the small canvas, resizing it
+    smallContext.drawImage(largeCanvas, 0, 0, 28, 28);
+
+    // Get the image data from the small canvas
+    const smallImageData = smallContext.getImageData(0, 0, 28, 28);
+
+    // Convert image data to grayscale array
+    const grayscaleArray = [];
+    for (let i = 0; i < smallImageData.data.length; i += 4) {
+        const grayscaleValue = (smallImageData.data[i] + smallImageData.data[i + 1] + smallImageData.data[i + 2]) / 3;
+        grayscaleArray.push([grayscaleValue / 255]);
+    }
+    
+
+    fetch('/feedback', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            'pixelArray': grayscaleArray,
+            'correctLabel': correctLabel, // Include the correct label in the payload
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message); // Notify the user that the feedback was processed
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to send feedback.');
+    });
+}
+
+
 
 function sendPrediction(pixelArray) {
     fetch('/predict', { 
@@ -113,6 +164,7 @@ function sendPrediction(pixelArray) {
         }
 
         document.getElementById('prediction').innerHTML = `<h2 >Prediction: ${data.prediction}</h2>`;
+       
 
         // Update bar chart with percentages
         updateBarChart(data.output);

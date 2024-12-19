@@ -24,5 +24,32 @@ def predict():
     else:
         return jsonify({'error': 'Prediction request failed'})
 
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    data = request.json
+    pixel_array = data.get('pixelArray')  # Retrieve pixel array
+    correct_label = data.get('correctLabel')  # Retrieve the correct label
+
+    if pixel_array is None or correct_label is None:
+        return jsonify({'error': 'Invalid data provided'}), 400
+
+    payload = {
+        'imagedata2': pixel_array,
+        'label': correct_label  # Send corrected label
+    }
+
+    # Send feedback data to the model training service
+    response = requests.post('http://127.0.0.1:5001/feedback', json=payload)
+
+    # Check response status
+    if response.status_code == 200:
+        return jsonify({'message': 'Feedback received and weights updated'})
+    elif response.status_code == 400:
+        return jsonify({'message': 'Weights remain unchanged'})
+    else:
+        return jsonify({'error': 'Feedback request failed'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)

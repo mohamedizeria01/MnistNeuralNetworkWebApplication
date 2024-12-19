@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <div class="left">
-            <h1>MNIST NEURAL NETWORK </h1>
+            <h1>MNIST NEURAL NETWORK</h1>
             <p>Draw a number in the canvas below:</p>
             <div id="canvasContainer">
                 <canvas id="canvas" width="280" height="280"></canvas>
@@ -27,8 +27,16 @@
                 <canvas id="barChart" width="800px" height="400px"></canvas>
             </div>
             <div id="prediction"></div>
+            
 
         </div>
+
+        <div id="feedback-container">
+            <p>If the prediction is incorrect, enter the correct number:</p>
+            <input type="number" id="correctLabel" min="0" max="9" placeholder="Correct Label">
+            <button onclick="sendFeedback()">Submit Feedback</button>
+        </div>
+        
     </div>
 
     <script src="static/script.js"></script>
